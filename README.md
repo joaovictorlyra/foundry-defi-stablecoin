@@ -1,3 +1,5 @@
+Algorhitmic Stable Coin deployed on Arbitrum
+
 1. (Relative Stability) Anchored ofr pegged -> $1.00
     1. Chainlink Price Feed.
     2. Set a function to exchange ETH & BTC -> $$$
