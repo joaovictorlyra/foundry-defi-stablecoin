@@ -27,6 +27,7 @@ import {DecentralizedStableCoin} from "./DecentralizedStableCoin.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {AggregatorV3Interface} from "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
+import {OracleLib} from "./libraries/OracleLib.sol";
 
 /**
  * @title DSCEngine
@@ -59,6 +60,10 @@ contract DSCEngine is ReentrancyGuard {
     error DSCEngine__HealthFactorOk();
     error DSCEngine__HealthFactorNotImproved();
 
+    ///////////////
+    //  Types   //
+    ///////////////
+    using OracleLib for AggregatorV3Interface;
 
     /////////////////////////
     // State Variables     //
@@ -405,7 +410,7 @@ contract DSCEngine is ReentrancyGuard {
         // $/ETH ETH?
         // $2000 / ETH. $1000 = 0.5 ETH
         AggregatorV3Interface priceFeed = AggregatorV3Interface(s_priceFeeds[token]);
-        (, int256 price,,,) = priceFeed.latestRoundData();
+        (, int256 price,,,) = priceFeed.staleCheckLatestRoundData();
         return (usdAmountInWei * PRECISION) / (uint256(price) * ADDITIONAL_FEED_PRECISION);
     }
 
@@ -423,7 +428,7 @@ contract DSCEngine is ReentrancyGuard {
     function getUsdValue(address token, uint256 amount) public view returns (uint256) {
         // price of token * amount / (10 ** decimals)
         AggregatorV3Interface priceFeed = AggregatorV3Interface(s_priceFeeds[token]);
-        (, int256 price,,,) = priceFeed.latestRoundData();
+        (, int256 price,,,) = priceFeed.staleCheckLatestRoundData();
         // 1 ETH = $1000
         // The returned value from CL will be 1000 * 1e8
         return (uint256(price) * ADDITIONAL_FEED_PRECISION * amount) / PRECISION;

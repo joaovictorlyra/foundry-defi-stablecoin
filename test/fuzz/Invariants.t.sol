@@ -28,6 +28,7 @@ contract Invariants is StdInvariant, Test {
     address weth;
     address wbtc;
     Handler handler;
+    
 
     function setUp() external {
         deployer = new DeployDSC();
@@ -49,8 +50,9 @@ contract Invariants is StdInvariant, Test {
         console.log("WETH Value:", wethValue);
         console.log("WBTC Value:", wbtcValue);
         console.log("Total Supply:", totalSupply);
+        console.log("Time Mint is called: ", handler.timesMintIsCalled());
 
         assert(wethValue + wbtcValue >= totalSupply);
 
     }
- }
+}
