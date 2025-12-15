@@ -1,4 +1,4 @@
-Algorhitmic Stable Coin deployed on Arbitrum
+Algorhitmic Stable Coin deployed on Scroll
 
 1. (Relative Stability) Anchored ofr pegged -> $1.00
     1. Chainlink Price Feed.
